@@ -29,3 +29,27 @@ jobs:
 
       - name: Exécution du script Python
         run: python3 script.py
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Installation des dépendances
+        run: pip install -r requirements.txt
+
+      - name: Coverage
+        run: coverage run -m pytest; coverage xml
+
+      - name: Get cover
+        uses: orogo/coverage@v3.1
+        with:
+          coverageFile: coverage.xml
+          token: ${{secrets.EPSI_TOKEN}}
